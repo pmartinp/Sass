@@ -1,0 +1,136 @@
+// Variables
+$primary-color: rgb(170, 57, 57);
+$secondary-color: rgb(170, 108, 57);
+$tertiary-color: rgb(136, 45, 96);
+$title-font: Verdana, Geneva, Tahoma, sans-serif;
+$text-font: Arial, Helvetica, sans-serif;
+$text-padding: 2rem;
+
+// Mixin
+@mixin theme() {
+    text-decoration: none;
+    font-family: $title-font;
+    padding: $text-padding;
+    color: white;
+}
+
+@mixin lightBG() {
+    background-color: bisque;
+}
+
+@mixin square($size, $radius: 0) {
+    width: $size;
+    height: $size;
+  
+    @if $radius != 0 {
+      border-radius: $radius;
+    }
+}
+
+@mixin circle($size) {
+    width: $size;
+    height: $size;
+    display: inline-block;
+    border-radius: 100%;
+}
+
+@mixin linear-gradient() {
+    background: linear-gradient(#e66465, #9198e5);
+}
+
+@mixin transform($value) {
+    -webkit-transform: $value;
+    -ms-transform: $value;
+    transform: $value;
+  }
+
+// funciones
+
+@function invert($color, $amount: 100%) {
+    $inverse: change-color($color, $hue: hue($color) + 180);
+    @return mix($inverse, $color, $amount);
+}
+
+@function heighthRel($width){
+    @return ($width/1.6) + rem;
+}
+
+@function widthQuarter($width){
+    @return ($width/4) + rem;
+}
+
+@function lighter($color){
+    @if (lightness($color)>50% && lightness($color)<90%){
+        @return lighten($color, 25%);
+    } @else {
+        @return lighten($color, 25%);
+    }
+}
+
+// Selectors
+body {
+    margin: 0;
+    .container{
+        font-family: $text-font;
+    }
+}
+
+nav{
+    background-color: $primary-color;
+    div{
+        display: flex;
+        justify-content: end;
+        a{
+            @include theme();
+            
+            &:hover{
+                background-color: invert($color: $secondary-color, $amount: 90%)
+            }
+        }
+        .enlaces{
+            width: 20rem;
+        }
+    }
+}
+
+.pitumba{
+    width: 100%;
+}
+@for $i from 1 through 4 {
+    .pitumba{
+        div:nth-child(2n + #{$i}){
+            background-color: invert($color: $tertiary-color, $amount: $i*10%);
+            width: widthQuarter(20*$i);
+            height: heighthRel(3);
+        }
+    }
+}
+
+.light-BG{
+    @include lightBG();
+    p {
+        padding: $text-padding;
+        background-color: lighter($tertiary-color);
+    }
+}
+
+.geometry{
+    display: flex;
+    margin-left:20%;
+}
+.square{
+    @include square(15rem);
+    @include lightBG();
+}
+
+.circle{
+    @include circle(15rem);
+    background-color: $primary-color;
+}
+
+.gradient{
+    @include square(15rem);
+    margin-left:20%;
+    @include linear-gradient();
+    @include transform(rotate(20deg));
+}
